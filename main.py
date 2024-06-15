@@ -24,6 +24,14 @@ app = web.App(host='0.0.0.0', port=80)
 WS_CLIENTS = set()
 
 
+async def send_message(msg):
+    for ws_client in WS_CLIENTS:
+        try:
+            await ws_client.send(msg)
+        except Exception as e:
+            print("Error sending message: " + str(e))
+
+
 # Verificar se algum botão foi clicado
 async def checkbut():
     global WS_CLIENTS
@@ -32,20 +40,15 @@ async def checkbut():
         if C.value() != state:
             state = not state
             msg = 'Button ' + ('OFF' if state else 'ON')
-            for ws_client in WS_CLIENTS:
-                try:
-                    await ws_client.send(msg)
-                except:
-                    continue
+            await send_message(msg)
         await asyncio.sleep_ms(10)
 
 
 # Página Index
 @app.route('/')
 async def index_handler(r, w):
-    f = open('index.html')
-    w.write(f.read())
-    f.close()
+    with open("index.html") as file:
+        w.write(file.read())
     await w.drain()
 
 
@@ -54,22 +57,29 @@ async def ws_handler(r, w):
     global WS_CLIENTS
 
     # Upgrade Connection to WebSocket
-    ws = await web.WebSocket.upgrade(r, w)
+    try:
+        ws = await web.WebSocket.upgrade(r, w)
+    except Exception as e:
+        print("WebSocket upgrade failed: " + str(e))
+        return
+
+    # Allow reading (?)
     r.closed = False
 
     # Add current client to set
     WS_CLIENTS.add(ws)
 
-    while ws.open:
+    while not r.closed:
         # Handle ws events
-        # led.value(not led.value())
         evt = await ws.recv()
 
         if evt is None or evt['type'] == 'close':
             ws.open = False
         elif evt['type'] == 'text':
             msg = evt['data']
-            # led.value(True if msg == "LED OFF" else False)
+            led.value(True if msg == "LED OFF" else False)
+
+    await send_message(str(r.closed))
 
     # Remove current client from set
     WS_CLIENTS.discard(ws)
