@@ -2,18 +2,40 @@ from games import colour_cycle, memory, morse
 from machine import Pin, PWM
 from time import sleep_us, sleep
 import asyncio
+import web
+
+print("Hi!")
+
+app = web.App(host='0.0.0.0', port=80)
+# root route handler
+@app.route('/')
+async def handler(r, w):
+    # write http headers
+    w.write(b'HTTP/1.0 200 OK\r\n')
+    w.write(b'Content-Type: text/html; charset=utf-8\r\n')
+    w.write(b'\r\n')
+    # write page body
+    w.write(b'Hello world!')
+    # drain stream buffer
+    await w.drain()
+
+# Start event loop and create server task
+loop = asyncio.get_event_loop()
+loop.create_task(app.serve())
+loop.run_forever()
+
 
 # colour_cycle(cycles=2)
-asyncio.run(memory(difficulty=2))
+# asyncio.run(memory(difficulty=2))
 # morse()
 
-#red = Pin(25, Pin.OUT)
-#green = Pin(21, Pin.OUT)
-#blue = Pin(22, Pin.OUT)
+# red = Pin(25, Pin.OUT)
+# green = Pin(21, Pin.OUT)
+# blue = Pin(22, Pin.OUT)
 
-#red.value(1)
-#green.value(0)
-#blue.value(0)
+# red.value(1)
+# green.value(0)
+# blue.value(0)
 
 # f=1000000
 # red = PWM(Pin(25))
