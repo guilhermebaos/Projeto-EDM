@@ -1,9 +1,10 @@
 from games import colour_cycle, memory, morse
 from machine import Pin, PWM
 from time import sleep_us, sleep
+import asyncio
 
 # colour_cycle(cycles=2)
-memory(difficulty=2)
+asyncio.run(memory(difficulty=2))
 # morse()
 
 #red = Pin(25, Pin.OUT)

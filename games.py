@@ -3,6 +3,7 @@
 from machine import Pin, PWM
 from time import sleep
 from random import choice
+import asyncio
 
 
 def morse(pinr=25, ping=21, pinb=22):
@@ -121,7 +122,7 @@ def morse(pinr=25, ping=21, pinb=22):
     return morse
 
 
-def memory(
+async def memory(
         pinr=25,
         ping=21,
         pinb=22,
@@ -151,6 +152,7 @@ def memory(
     - difficulty: nível de dificuldade (associada ao tempo de pausa entre cores).
                 Pode ser 1, 2 ou 3.
     """
+    print("Start")
 
     # escolher a dificuldade
     pauses_list = [1.5, 1, 0.5]
@@ -185,22 +187,22 @@ def memory(
             if colour == "red":
                 for _ in range(2):
                     red.value(not red.value())
-                    sleep(pause)
+                    await asyncio.sleep(pause)
             elif colour == "green":
                 for _ in range(2):
                     green.value(not green.value())
-                    sleep(pause)
+                    await asyncio.sleep(pause)
             elif colour == "blue":
                 for _ in range(2):
                     blue.value(not blue.value())
-                    sleep(pause)
+                    await asyncio.sleep(pause)
 
-        sleep(0.5)
+        await asyncio.sleep(0.5)
 
         # sinalizar ao jogador que pode começar a jogada
         for _ in range(4):
             green.value(not green.value())
-            sleep(1 / 10)
+            await asyncio.sleep(1 / 10)
 
         # guardar a resposta do jogador
         moves = []
@@ -208,38 +210,38 @@ def memory(
 
             if not butred.value():  # pressiona vermelho
                 moves.append("red")
-                sleep(0.3)
+                await asyncio.sleep(0.3)
 
             if not butgreen.value():  # pressiona verde
                 moves.append("green")
-                sleep(0.3)
+                await asyncio.sleep(0.3)
 
             if not butblue.value():  # pressiona azul
                 moves.append("blue")
-                sleep(0.3)
+                await asyncio.sleep(0.3)
 
             if not butreset.value():  # dar reset à resposta
                 moves = []
-                sleep(0.3)
+                await asyncio.sleep(0.3)
 
             if not butsubmit.value():  # submeter a resposta
                 break
 
-        sleep(1)
+        await asyncio.sleep(1)
 
         # mostrar se a resposta está correta ou não
         answer = (moves == random_sequence)
         if answer:
             for _ in range(6):
                 green.value(not green.value())
-                sleep(1 / 7)
+                await asyncio.sleep(1 / 7)
         else:
             for _ in range(6):
                 red.value(not red.value())
-                sleep(1 / 7)
+                await asyncio.sleep(1 / 7)
             n -= 1  # repetir o nível
 
-        sleep(3)
+        await asyncio.sleep(3)
         # passar para o próximo nível
         n += 1
 
@@ -288,7 +290,7 @@ def colour_cycle(pinr=25, ping=21, pinb=22, cycles=3, pause=0.5):
             # piscar o LED vermelho para mostrar que terminou
             for _ in range(6):
                 red.duty(t1)
-                sleep(1 / 7)
+                await asyncio.sleep(1 / 7)
                 t1, t2 = t2, t1
             break
         # transição desligado -> vermelho
@@ -298,7 +300,7 @@ def colour_cycle(pinr=25, ping=21, pinb=22, cycles=3, pause=0.5):
                 t = 0
                 break
             red.duty(t)
-            sleep(1 / 500)
+            await asyncio.sleep(1 / 500)
             t -= 5
         # transição vermelho -> verde
         green.duty(0)
@@ -307,7 +309,7 @@ def colour_cycle(pinr=25, ping=21, pinb=22, cycles=3, pause=0.5):
                 t = 0
                 break
             red.duty(t)
-            sleep(1 / 500)
+            await asyncio.sleep(1 / 500)
             t += 1
         # transição verde -> azul
         blue.duty(0)
@@ -316,7 +318,7 @@ def colour_cycle(pinr=25, ping=21, pinb=22, cycles=3, pause=0.5):
                 t = 0
                 break
             green.duty(t)
-            sleep(1 / 500)
+            await asyncio.sleep(1 / 500)
             t += 1
         # transição azul -> desligado
         while 1:
@@ -324,9 +326,9 @@ def colour_cycle(pinr=25, ping=21, pinb=22, cycles=3, pause=0.5):
                 t = 0
                 break
             blue.duty(t)
-            sleep(1 / 500)
+            await asyncio.sleep(1 / 500)
             t += 5
-        sleep(pause)
+        await asyncio.sleep(pause)
         cycle_num += 1
     # desligar os LEDs, mas libertá-los para uso (desligar os sinais PWM)
     red.deinit()
