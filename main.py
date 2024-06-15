@@ -11,6 +11,8 @@ SO = Pin(10, Pin.IN, Pin.PULL_UP)
 SE = Pin(9, Pin.IN, Pin.PULL_UP)
 C = Pin(12, Pin.IN, Pin.PULL_UP)
 
+BTNS = [NO, SO, C, NE, SE]
+
 # Pinos dos LEDs
 red = Pin(25, Pin.OUT)
 green = Pin(21, Pin.OUT)
@@ -18,8 +20,6 @@ blue = Pin(22, Pin.OUT)
 
 RGB = [red, green, blue]
 
-# Mostrar que chegamos ao main.py
-green.value(0)
 
 
 def turnON(index):
@@ -29,6 +29,14 @@ def turnON(index):
         else:
             item.value(1)
 
+
+def turnOFF():
+    for pos, item in enumerate(RGB):
+        item.value(1)
+
+
+# Mostrar que chegamos ao main.py
+turnON(1)
 
 # Criar a App
 app = web.App(host='0.0.0.0', port=80)
@@ -46,15 +54,21 @@ async def send_message(msg):
 
 
 # Verificar se algum botão foi clicado
+last_message = "-1"
 async def checkbut():
-    global WS_CLIENTS
-    state = True
+    global WS_CLIENTS, last_message
     while True:
-        if C.value() != state:
-            state = not state
-            msg = 'Button ' + ('OFF' if state else 'ON')
-            await send_message(msg)
-        await asyncio.sleep_ms(10)
+        new_message = "5"
+        for index, item in enumerate(BTNS):
+            if not item.value():
+                new_message = str(index)
+                break
+
+        if new_message != last_message:
+            await send_message(new_message)
+            last_message = new_message
+
+        await asyncio.sleep_ms(5)
 
 
 # Página Index
@@ -74,14 +88,14 @@ async def style_handler(r, w):
 
 
 @app.route('/websocket.js')
-async def style_handler(r, w):
+async def websocketjs_handler(r, w):
     with open("websocket.js") as file:
         w.write(file.read())
     await w.drain()
 
 
 @app.route('/index.js')
-async def style_handler(r, w):
+async def indexjs_handler(r, w):
     with open("index.js") as file:
         w.write(file.read())
     await w.drain()
@@ -122,7 +136,7 @@ async def ws_handler(r, w):
 
 # Mostrar que o programa está pronto a começar!
 sleep(0.2)
-green.value(1)
+turnOFF()
 
 # Start event loop and create server task
 loop = asyncio.get_event_loop()

@@ -27,7 +27,7 @@ function onClose(evt) {
 
 function onMessage(evt) {
     console.log(evt.data)
-    document.getElementById("button").innerHTML = evt.data
+    receiveMessage(evt.data)
 }
 
 function onError(evt) {

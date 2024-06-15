@@ -44,19 +44,56 @@
     </nav>
 
     <main class="container text-center mt-4 col-md-8 col-md-offset-2 col-xl-6 col-xl-offset-6">
-        <div class="container w-100 my-5">
-            Jogos com Joystick
-        </div>
-
+        <h1>Jogos com Joystick</h1>
         
-        <div class="container my-5">
+        <p>Antes de escolheres um jogo, verifica que o teu LED e Joystick estão a funcionar!</p>
+
+        <h2 class="mt-5">Testa o LED!</h2>
+        <div class="container my-3">
             <button type="button" class="btn btn-light" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="sendMessage('0')">RED</button>
             <button type="button" class="btn btn-light" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="sendMessage('1')">GREEN</button>
             <button type="button" class="btn btn-light" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="sendMessage('2')">BLUE</button>
-          </div>
+        </div>
+
+        <h2 class="mt-5">Testa o Joystick!</h2>
+        <div id="teste-joystick" class="container my-3">
+            <div class="row">
+                <div class="col-4">
+                    <div class="rounded-div"></div>
+                </div>
+                <div class="col-4">
+                    <div id="UP" class="rounded-div"></div>
+                </div>
+                <div class="col-4">
+                    <div class="rounded-div"></div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-4">
+                    <div id="LEFT" class="rounded-div"></div>
+                </div>
+                <div class="col-4">
+                    <div id="CENTER" class="rounded-div"></div>
+                </div>
+                <div class="col-4">
+                    <div id="RIGHT" class="rounded-div"></div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-4">
+                    <div class="rounded-div"></div>
+                </div>
+                <div class="col-4">
+                    <div id="DOWN" class="rounded-div"></div>
+                </div>
+                <div class="col-4">
+                    <div class="rounded-div"></div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <footer class="container-fluid fs-5 text-light p-1 mt-5">
+    <footer class="container-fluid fs-5 text-light mt-5">
       <div class="row p-1 p-3">
         <div class="col-md-6 text-md-start col-12 text-center">
           <a class="navbar-brand" href="index.html">Jogos com Joystick</a>

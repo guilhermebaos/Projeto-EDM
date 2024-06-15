@@ -20,6 +20,21 @@ nav {
 }
 
 
+.rounded-div {
+    border: 0px solid #000;
+    border-radius: 15px;
+    height: 50px; /* Adjust the height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#teste-joystick {
+    width: 50%;
+}
+
+
 canvas {
     border: 1px solid black;
     border-radius: 1px;
