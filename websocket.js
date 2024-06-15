@@ -1,4 +1,5 @@
 let websocket
+let display
 function init() {
     let scheme
     if (window.location.protocol == 'https:')
@@ -6,6 +7,7 @@ function init() {
     else
         scheme = 'ws:'
 
+    display = document.getElementById("display")
     
     let wsUri = scheme + '//' + window.location.hostname + '/ws';
     console.log("Connecting to " + wsUri + "...")
@@ -15,14 +17,19 @@ function init() {
     websocket.onclose   = function(evt) { onClose   (evt) }
     websocket.onmessage = function(evt) { onMessage (evt) }
     websocket.onerror   = function(evt) { onError   (evt) }
+
 }
 
 function onOpen(evt) {
     console.log("Connected")
+    display.innerText = "Conectado!"
+    display.style.color = "green"
 }
 
 function onClose(evt) {
     console.log("Disconnected")
+    display.innerText = "Desconectado :("
+    display.style.color = "red"
 }
 
 function onMessage(evt) {

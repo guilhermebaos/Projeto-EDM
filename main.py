@@ -1,8 +1,12 @@
-from games import colour_cycle, memory, morse
+from games import colour_cycle
 from machine import Pin, PWM
-from time import sleep_us, sleep
 import asyncio
 import web
+import gc
+
+
+
+
 
 # Botões Input
 NO = Pin(14, Pin.IN, Pin.PULL_UP)
@@ -19,7 +23,6 @@ green = Pin(21, Pin.OUT)
 blue = Pin(22, Pin.OUT)
 
 RGB = [red, green, blue]
-
 
 
 def turnON(index):
@@ -53,6 +56,31 @@ async def send_message(msg):
             print("Error sending message: " + str(e))
 
 
+running_tasks = dict()
+async def receive_message(msg):
+
+    # Ordem para ligar um dos LEDs
+    if msg in ["0", "1", "2"]:
+        turnON(int(msg))
+
+    elif msg == "OFF":
+        turnOFF()
+
+    elif msg == "CYCLE_START":
+        task = asyncio.create_task(colour_cycle(cycles=1e6))
+        running_tasks["colour_cycle"] = task
+
+    elif msg == "STOP":
+        asyncio.create_task(send_message(msg))
+        for task in running_tasks.values():
+            task.cancel()
+
+        await asyncio.sleep(0)
+        turnOFF()
+
+    return
+
+
 # Verificar se algum botão foi clicado
 last_message = "-1"
 async def checkbut():
@@ -65,7 +93,7 @@ async def checkbut():
                 break
 
         if new_message != last_message:
-            await send_message(new_message)
+            asyncio.create_task(send_message(new_message))
             last_message = new_message
 
         await asyncio.sleep_ms(5)
@@ -126,28 +154,42 @@ async def ws_handler(r, w):
             ws.open = False
         elif evt['type'] == 'text':
             msg = evt['data']
-            turnON(int(msg))
-
-    await send_message(str(r.closed))
+            asyncio.create_task(receive_message(msg))
 
     # Remove current client from set
     WS_CLIENTS.discard(ws)
 
 
-# Mostrar que o programa está pronto a começar!
-sleep(0.2)
-turnOFF()
+# Ver https://docs.micropython.org/en/latest/reference/constrained.html#the-heap
+async def garbage_collection():
+    while True:
+        gc.collect()
+        gc.threshold(gc.mem_free() // 4 + gc.mem_alloc())
+        await asyncio.sleep(1)
+
+
+# Começar o programa
+async def main():
+    # Ligar a aplicação
+    asyncio.create_task(app.serve())
+
+    # Ligar a recolha de lixo
+    asyncio.create_task(garbage_collection())
+
+    # Mostrar que o programa está pronto a começar!
+    await asyncio.sleep(0.2)
+    turnOFF()
+
+    # Ver se algum botão foi premido (loop infinito)
+    await checkbut()
+
 
 # Start event loop and create server task
-loop = asyncio.get_event_loop()
-loop.create_task(app.serve())
-loop.create_task(checkbut())
-# loop.create_task(memory(difficulty=2))
-loop.run_forever()
+asyncio.run(main())
 
 
 # colour_cycle(cycles=2)
-# asyncio.run(memory(difficulty=2))
+# loop.create_task(memory(difficulty=2))
 # morse()
 
 
