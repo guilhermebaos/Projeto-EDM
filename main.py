@@ -11,10 +11,23 @@ SO = Pin(10, Pin.IN, Pin.PULL_UP)
 SE = Pin(9, Pin.IN, Pin.PULL_UP)
 C = Pin(12, Pin.IN, Pin.PULL_UP)
 
-led = Pin(25, Pin.OUT)
-led.value(0)
-sleep(0.2)
-led.value(1)
+# Pinos dos LEDs
+red = Pin(25, Pin.OUT)
+green = Pin(21, Pin.OUT)
+blue = Pin(22, Pin.OUT)
+
+RGB = [red, green, blue]
+
+# Mostrar que chegamos ao main.py
+green.value(0)
+
+
+def turnON(index):
+    for pos, item in enumerate(RGB):
+        if pos == index:
+            item.value(0)
+        else:
+            item.value(1)
 
 
 # Criar a App
@@ -52,6 +65,28 @@ async def index_handler(r, w):
     await w.drain()
 
 
+# Ficheiros auxiliares
+@app.route('/style.css')
+async def style_handler(r, w):
+    with open("style.css") as file:
+        w.write(file.read())
+    await w.drain()
+
+
+@app.route('/websocket.js')
+async def style_handler(r, w):
+    with open("websocket.js") as file:
+        w.write(file.read())
+    await w.drain()
+
+
+@app.route('/index.js')
+async def style_handler(r, w):
+    with open("index.js") as file:
+        w.write(file.read())
+    await w.drain()
+
+
 @app.route('/ws')
 async def ws_handler(r, w):
     global WS_CLIENTS
@@ -77,12 +112,17 @@ async def ws_handler(r, w):
             ws.open = False
         elif evt['type'] == 'text':
             msg = evt['data']
-            led.value(True if msg == "LED OFF" else False)
+            turnON(int(msg))
 
     await send_message(str(r.closed))
 
     # Remove current client from set
     WS_CLIENTS.discard(ws)
+
+
+# Mostrar que o programa está pronto a começar!
+sleep(0.2)
+green.value(1)
 
 # Start event loop and create server task
 loop = asyncio.get_event_loop()
@@ -96,9 +136,6 @@ loop.run_forever()
 # asyncio.run(memory(difficulty=2))
 # morse()
 
-# red = Pin(25, Pin.OUT)
-# green = Pin(21, Pin.OUT)
-# blue = Pin(22, Pin.OUT)
 
 # red.value(1)
 # green.value(0)

@@ -1,0 +1,40 @@
+body {
+    background-color: #242222;
+    color: white;
+}
+
+nav, footer {
+    background-color: #1b1919;
+}
+
+nav {
+    font-size: 0.9rem;
+    text-align: center;
+    font-family: "Century Gothic";
+    font-style: italic;
+    font-weight: bolder;
+}
+
+.nav-link{
+    color: #c1c1c1;
+}
+
+
+canvas {
+    border: 1px solid black;
+    border-radius: 1px;
+    width: 100%;
+}
+
+.canvas-overflow {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0px;
+    width: 100%;
+}
+
+.canvas-container {
+    margin: auto;
+    padding: 0;
+}
+  
