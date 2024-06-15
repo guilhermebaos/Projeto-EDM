@@ -4,24 +4,81 @@ from time import sleep_us, sleep
 import asyncio
 import web
 
-print("Hi!")
+# Botões Input
+NO = Pin(14, Pin.IN, Pin.PULL_UP)
+NE = Pin(13, Pin.IN, Pin.PULL_UP)
+SO = Pin(10, Pin.IN, Pin.PULL_UP)
+SE = Pin(9, Pin.IN, Pin.PULL_UP)
+C = Pin(12, Pin.IN, Pin.PULL_UP)
 
+led = Pin(25, Pin.OUT)
+led.value(0)
+sleep(0.2)
+led.value(1)
+
+
+# Criar a App
 app = web.App(host='0.0.0.0', port=80)
-# root route handler
+
+# Criar WebSocket client
+WS_CLIENTS = set()
+
+
+# Verificar se algum botão foi clicado
+async def checkbut():
+    global WS_CLIENTS
+    state = True
+    while True:
+        if C.value() != state:
+            state = not state
+            msg = 'Button ' + ('OFF' if state else 'ON')
+            for ws_client in WS_CLIENTS:
+                try:
+                    await ws_client.send(msg)
+                except:
+                    continue
+        await asyncio.sleep_ms(10)
+
+
+# Página Index
 @app.route('/')
-async def handler(r, w):
-    # write http headers
-    w.write(b'HTTP/1.0 200 OK\r\n')
-    w.write(b'Content-Type: text/html; charset=utf-8\r\n')
-    w.write(b'\r\n')
-    # write page body
-    w.write(b'Hello world!')
-    # drain stream buffer
+async def index_handler(r, w):
+    f = open('index.html')
+    w.write(f.read())
+    f.close()
     await w.drain()
+
+
+@app.route('/ws')
+async def ws_handler(r, w):
+    global WS_CLIENTS
+
+    # Upgrade Connection to WebSocket
+    ws = await web.WebSocket.upgrade(r, w)
+    r.closed = False
+
+    # Add current client to set
+    WS_CLIENTS.add(ws)
+
+    while ws.open:
+        # Handle ws events
+        # led.value(not led.value())
+        evt = await ws.recv()
+
+        if evt is None or evt['type'] == 'close':
+            ws.open = False
+        elif evt['type'] == 'text':
+            msg = evt['data']
+            # led.value(True if msg == "LED OFF" else False)
+
+    # Remove current client from set
+    WS_CLIENTS.discard(ws)
 
 # Start event loop and create server task
 loop = asyncio.get_event_loop()
 loop.create_task(app.serve())
+loop.create_task(checkbut())
+# loop.create_task(memory(difficulty=2))
 loop.run_forever()
 
 
@@ -53,12 +110,6 @@ loop.run_forever()
 # r = 0
 # g = 0
 # b = 0
-
-# NO = Pin(14, Pin.IN, Pin.PULL_UP)
-# NE = Pin(13, Pin.IN, Pin.PULL_UP)
-# SO = Pin(10, Pin.IN, Pin.PULL_UP)
-# SE = Pin(9, Pin.IN, Pin.PULL_UP)
-# C = Pin(12, Pin.IN, Pin.PULL_UP)
 
 # while True:
 

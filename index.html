@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogos com Joystick</title>
+
+    <script language="javascript">
+        let websocket
+        function init() {
+            var scheme
+            if (window.location.protocol == 'https:')
+                scheme = 'wss:'
+            else
+                scheme = 'ws:'
+
+            
+            var wsUri = scheme + '//' + window.location.hostname + '/ws';
+            logMsg("Connecting to " + wsUri + "...")
+
+            websocket           = new WebSocket(wsUri)
+            websocket.onopen    = function(evt) { onOpen    (evt) }
+            websocket.onclose   = function(evt) { onClose   (evt) }
+            websocket.onmessage = function(evt) { onMessage (evt) }
+            websocket.onerror   = function(evt) { onError   (evt) }
+        }
+    
+        function onOpen(evt) {
+            logMsg("Connected")
+        }
+    
+        function onClose(evt) {
+            logMsg("Disconnected")
+        }
+    
+        function onMessage(evt) {
+            logMsg(evt.data)
+            document.getElementById("button").innerHTML = evt.data
+        }
+    
+        function onError(evt) {
+            logMsg('ERROR: ' + evt.data)
+        }
+    
+        function logMsg(s) {
+            document.getElementById("log").value += s + '\n'
+        }
+    
+        function ledClick() {
+            if (document.getElementById("led").checked)
+                websocket.send('LED ON')
+            else
+                websocket.send('LED OFF')
+
+            console.log(websocket)
+        }
+    
+        window.addEventListener("load", init, false)
+    </script>
+</head>
+
+
+<body>
+    <h1>Button LED webpage</h1>
+    <input type="checkbox" id="led" onclick="ledClick()">LED<br>
+    <p id="button">Button Off</p>
+    <textarea id="log" rows="10" cols="100"></textarea>
+</body>
+</html>
