@@ -332,9 +332,9 @@ async def index_handler2(r, w):
     await w.drain()
 
 
-@app.route('/index.js')
-async def indexjs_handler(r, w):
-    with open("index.js") as file:
+@app.route('/indexIndex.js')
+async def indexIndexjs_handler(r, w):
+    with open("indexIndex.js") as file:
         w.write(file.read())
     await w.drain()
 
@@ -374,6 +374,142 @@ async def morsegamejs_handler(r, w):
     with open("morse-game.js") as file:
         w.write(file.read())
     await w.drain()
+
+
+# Página Breakout
+@app.route('/breakout.html')
+async def breakout_handler(r, w):
+    with open("breakout.html") as file:
+        w.write(file.read())
+    await w.drain()
+
+
+@app.route('/src/ball.js')
+async def ball_handler(r, w):
+    with open("ball.js") as file:
+        script_data = file.read()
+        w.write(b'HTTP/1.0 200 OK\r\n')
+        w.write(b'Content-Type: application/javascript\r\n')
+        w.write(b'\r\n')
+        w.write(script_data.encode())
+    await w.drain()
+
+
+@app.route('/src/brick.js')
+async def brick_handler(r, w):
+    with open("brick.js") as file:
+        script_data = file.read()
+        w.write(b'HTTP/1.0 200 OK\r\n')
+        w.write(b'Content-Type: application/javascript\r\n')
+        w.write(b'\r\n')
+        w.write(script_data.encode())
+    await w.drain()
+
+
+@app.route('/src/collisionDetection.js')
+async def collisionDetection_handler(r, w):
+    with open("collisionDetection.js") as file:
+        script_data = file.read()
+        w.write(b'HTTP/1.0 200 OK\r\n')
+        w.write(b'Content-Type: application/javascript\r\n')
+        w.write(b'\r\n')
+        w.write(script_data.encode())
+    await w.drain()
+
+
+@app.route('/src/game.js')
+async def game_handler(r, w):
+    with open("game.js") as file:
+        script_data = file.read()
+        w.write(b'HTTP/1.0 200 OK\r\n')
+        w.write(b'Content-Type: application/javascript\r\n')
+        w.write(b'\r\n')
+        w.write(script_data.encode())
+    await w.drain()
+
+
+@app.route('/src/index.js')
+async def breakoutindexjs_handler(r, w):
+    with open("index.js", "r") as file:
+        script_data = file.read()
+        w.write(b'HTTP/1.0 200 OK\r\n')
+        w.write(b'Content-Type: application/javascript\r\n')
+        w.write(b'\r\n')
+        w.write(script_data.encode())
+    await w.drain()
+
+
+@app.route('/src/input.js')
+async def input_handler(r, w):
+    with open("input.js") as file:
+        script_data = file.read()
+        w.write(b'HTTP/1.0 200 OK\r\n')
+        w.write(b'Content-Type: application/javascript\r\n')
+        w.write(b'\r\n')
+        w.write(script_data.encode())
+    await w.drain()
+
+
+@app.route('/src/levels.js')
+async def levels_handler(r, w):
+    with open("levels.js") as file:
+        script_data = file.read()
+        w.write(b'HTTP/1.0 200 OK\r\n')
+        w.write(b'Content-Type: application/javascript\r\n')
+        w.write(b'\r\n')
+        w.write(script_data.encode())
+    await w.drain()
+
+
+@app.route('/src/paddle.js')
+async def paddle_handler(r, w):
+    with open("paddle.js") as file:
+        script_data = file.read()
+        w.write(b'HTTP/1.0 200 OK\r\n')
+        w.write(b'Content-Type: application/javascript\r\n')
+        w.write(b'\r\n')
+        w.write(script_data.encode())
+    await w.drain()
+
+
+@app.route('/assets/images/ball.png')
+async def ballpng_handler(r, w):
+    try:
+        # Open image file in binary mode
+        with open('ball.png', 'rb') as f:
+            image_data = f.read()
+            w.write(b'HTTP/1.0 200 OK\r\n')
+            w.write(b'Content-Type: image/jpeg\r\n')
+            w.write(b'Content-Length: ' + str(len(image_data)).encode() + b'\r\n')
+            w.write(b'\r\n')
+            w.write(image_data)
+            await w.drain()
+
+    except Exception as e:
+        print(f"Failed to serve image: {e}")
+        w.write(b'HTTP/1.0 500 Internal Server Error\r\n')
+        w.write(b'\r\n')
+        await w.drain()
+
+
+@app.route('/assets/images/brick.png')
+async def brickpng_handler(r, w):
+    try:
+        # Open image file in binary mode
+        with open('brick.png', 'rb') as f:
+            image_data = f.read()
+            w.write(b'HTTP/1.0 200 OK\r\n')
+            w.write(b'Content-Type: image/jpeg\r\n')
+            w.write(b'Content-Length: ' + str(len(image_data)).encode() + b'\r\n')
+            w.write(b'\r\n')
+            w.write(image_data)
+            await w.drain()
+
+    except Exception as e:
+        print(f"Failed to serve image: {e}")
+        w.write(b'HTTP/1.0 500 Internal Server Error\r\n')
+        w.write(b'\r\n')
+        await w.drain()
 
 
 # Ficheiros auxiliares
@@ -450,10 +586,7 @@ async def main():
 asyncio.run(main())
 
 
-# colour_cycle(cycles=2)
-# loop.create_task(memory(difficulty=2))
-# morse()
-
+# Testing
 
 # red.value(1)
 # green.value(0)
