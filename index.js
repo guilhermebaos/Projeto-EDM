@@ -1,15 +1,23 @@
-let up, left, center, right, down
+let no, ne, center, so, se
 let divs
 
+// Carregar a página
 window.addEventListener("load", () => {
-    up = document.getElementById("UP")
-    left = document.getElementById("LEFT")
+    no = document.getElementById("NO")
+    ne = document.getElementById("NE")
     center = document.getElementById("CENTER")
-    right = document.getElementById("RIGHT")
-    down = document.getElementById("DOWN")
+    so = document.getElementById("SO")
+    se = document.getElementById("SE")
 
-    divs = [up, left, center, right, down]
+    divs = [no, ne, center, so, se]
 }, false)
+
+
+// Desligar tarefas do ESP antes de sair da página
+window.addEventListener("visibilitychange", () => {
+    websocket.send("STOP")
+}, false)
+
 
 function sendMessage(msg) {
     websocket.send(msg)

@@ -1,4 +1,4 @@
-from games import colour_cycle
+from games import colour_cycle, memory
 from machine import Pin, PWM
 import asyncio
 import web
@@ -15,7 +15,7 @@ SO = Pin(10, Pin.IN, Pin.PULL_UP)
 SE = Pin(9, Pin.IN, Pin.PULL_UP)
 C = Pin(12, Pin.IN, Pin.PULL_UP)
 
-BTNS = [NO, SO, C, NE, SE]
+BTNS = [NO, NE, C, SO, SE]
 
 # Pinos dos LEDs
 red = Pin(25, Pin.OUT)
@@ -57,10 +57,17 @@ async def send_message(msg):
 
 
 running_tasks = dict()
+async def stop_tasks():
+    global running_tasks
+    for task in running_tasks.values():
+        task.cancel()
+
+
 async def receive_message(msg):
 
     # Ordem para ligar um dos LEDs
     if msg in ["0", "1", "2"]:
+        await stop_tasks()
         turnON(int(msg))
 
     elif msg == "OFF":
@@ -72,11 +79,13 @@ async def receive_message(msg):
 
     elif msg == "STOP":
         asyncio.create_task(send_message(msg))
-        for task in running_tasks.values():
-            task.cancel()
-
+        await stop_tasks()
         await asyncio.sleep(0)
         turnOFF()
+
+    elif "MEMORY" in msg:
+        dif = int(msg[-1])
+
 
     return
 
@@ -107,6 +116,28 @@ async def index_handler(r, w):
     await w.drain()
 
 
+@app.route('/index.js')
+async def indexjs_handler(r, w):
+    with open("index.js") as file:
+        w.write(file.read())
+    await w.drain()
+
+
+# Página jogo da memória
+@app.route('/memory.html')
+async def memory_handler(r, w):
+    with open("memory.html") as file:
+        w.write(file.read())
+    await w.drain()
+
+
+@app.route('/memory.js')
+async def memoryjs_handler(r, w):
+    with open("memory.js") as file:
+        w.write(file.read())
+    await w.drain()
+
+
 # Ficheiros auxiliares
 @app.route('/style.css')
 async def style_handler(r, w):
@@ -121,12 +152,6 @@ async def websocketjs_handler(r, w):
         w.write(file.read())
     await w.drain()
 
-
-@app.route('/index.js')
-async def indexjs_handler(r, w):
-    with open("index.js") as file:
-        w.write(file.read())
-    await w.drain()
 
 
 @app.route('/ws')

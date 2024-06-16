@@ -20,7 +20,7 @@
 
     <!-- Our JS -->
      <script src="websocket.js"></script>
-     <script src="index.js" defer></script>
+     <script src="memory.js" defer></script>
 
     <title>
         Jogos com Joystick
@@ -51,57 +51,22 @@
     </nav>
 
     <main class="container text-center mt-4 col-md-8 col-md-offset-2 col-xl-6 col-xl-offset-6">
-        <h1 class="my-brand">Jogos com Joystick</h1>
+        <h1 class="my-brand">Jogo da Memória</h1>
         
-        <p>Antes de escolheres um jogo, verifica que o teu LED e Joystick estão a funcionar!</p>
+        <p>Repete a sequência de luzes mostrada no LED do ESP32</p>
 
-        <h2 class="mt-5">Testa o LED</h2>
-        <p>Clica nos botões para verificar que o LED Funciona</p>
-        <div class="container my-3">
-            <div class="row">
-                <div class="col-md-3 col-0"></div>
-                <div class="col-md-2 col-4 px-2">
-                    <button type="button" class="btn btn-light btn-led" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="sendMessage('0')">RED</button>
-                </div>
-                <div class="col-md-2 col-4 px-2">
-                    <button type="button" class="btn btn-light btn-led" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="sendMessage('1')">GREEN</button>
-                </div>
-                <div class="col-md-2 col-4 px-2">
-                    <button type="button" class="btn btn-light btn-led" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="sendMessage('2')">BLUE</button>
-                </div>
-                <div class="col-md-3 col-0"></div>
-            </div>
-            <div class="container my-2">
-                <div class="row">
-                    <div class="col-md-3 col-0 px-0"></div>
-                    <div class="col-md-6 col-12 px-0">
-                        <button type="button" class="btn btn-light btn-led" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="sendMessage('CYCLE_START')">CICLO RGB</button>
-                    </div>
-                    <div class="col-md-3 col-0 px-0"></div>
-                </div>
-            </div>
-            <div class="container my-2">
-                <div class="row">
-                    <div class="col-md-3 col-0 px-0"></div>
-                    <div class="col-md-6 col-12 px-0">
-                        <button type="button" class="btn btn-light btn-led" data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="sendMessage('STOP')">DESLIGAR</button>
-                    </div>
-                    <div class="col-md-3 col-0 px-0"></div>
-                </div>
-            </div>
-        </div>
-
-        <h2 class="mt-5">Testa o Joystick</h2>
-        <div id="teste-joystick" class="container my-md-3 my-0">
+        <h2 class="mt-5">Controlos</h2>
+        <p>Usa o Joystick para indicares a sequência de cores:</p>
+        <div id="teste-joystick" class="container my-3">
             <div class="row">
                 <div class="col-4">
-                    <div id="NO" class="rounded-div"></div>
+                    <div id="NO" class="rounded-div border border-dark"> GREEN </div>
                 </div>
                 <div class="col-4">
                     <div id="UP" class="rounded-div"></div>
                 </div>
                 <div class="col-4">
-                    <div id="NE" class="rounded-div"></div>
+                    <div id="NE" class="rounded-div border border-dark">BLUE</div>
                 </div>
             </div>
             <div class="row mt-3">
@@ -109,7 +74,7 @@
                     <div id="LEFT" class="rounded-div"></div>
                 </div>
                 <div class="col-4">
-                    <div id="CENTER" class="rounded-div"></div>
+                    <div id="CENTER" class="rounded-div border border-dark">SUBMIT</div>
                 </div>
                 <div class="col-4">
                     <div id="RIGHT" class="rounded-div"></div>
@@ -117,13 +82,51 @@
             </div>
             <div class="row mt-3">
                 <div class="col-4">
-                    <div id="SO" class="rounded-div"></div>
+                    <div id="SO" class="rounded-div border border-dark">RED</div>
                 </div>
                 <div class="col-4">
                     <div id="DOWN" class="rounded-div"></div>
                 </div>
                 <div class="col-4">
-                    <div id="SE" class="rounded-div"></div>
+                    <div id="SE" class="rounded-div border border-dark">CANCEL</div>
+                </div>
+            </div>
+        </div>
+        <h2 class="mt-5">Dificuldade</h2>
+        <p>
+            Escolhe a dificuldade em que queres jogar:
+        </p>
+        <div id="teste-joystick" class="container my-3">
+            <div class="row">
+                <div class="col-4">
+                    <div class="rounded-div"><button id="d1" class="btn btn-light"> Normal </button></div>
+                </div>
+                <div class="col-4">
+                    <div class="rounded-div"> <button id="d2" class="btn btn-light"> Difícil </button></div>
+                </div>
+                <div class="col-4">
+                    <div class="rounded-div"><button id="d3" class="btn btn-light"> Expert </button></div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="mt-5">Nível Atual</h2>
+        <p>Estás no nível <span id="level">1</span>!</p>
+
+
+        
+        <h2 class="mt-5">Sequência Introduzida</h2>
+        <p>Aqui podes ver a sequência que introduziste:</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-5">
+                    <div class="rounded-div"></div>
+                </div>
+                <div class="col-2">
+                    <div class="rounded-div border border-dark"></div>
+                </div>
+                <div class="col-5">
+                    <div class="rounded-div"></div>
                 </div>
             </div>
         </div>
