@@ -109,7 +109,7 @@ async def receive_message(msg):
         await stop_leds()
         word = msg.split(":")[1]
 
-        await asyncio.sleep(0.3)
+        await asyncio.sleep(0.5)
         task = asyncio.create_task(morse(word))
         running_tasks["morse"] = task
 
