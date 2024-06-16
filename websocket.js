@@ -34,7 +34,11 @@ function onClose(evt) {
 
 function onMessage(evt) {
     console.log(evt.data)
-    receiveMessage(evt.data)
+    try {
+        receiveMessage(evt.data)
+    } catch (e) {
+        window.receiveMessage(evt.data)
+    }
 }
 
 function onError(evt) {

@@ -64,7 +64,7 @@ export default class Game {
             || this.gamestate === GAMESTATE.GAMEOVER) return
         
         if (this.lives === 0) this.gamestate = GAMESTATE.GAMEOVER
-        console.log(this.bricks.length)
+        
         if (this.bricks.length === 0) {
             this.currentLevel++
             this.gamestate = GAMESTATE.NEWLEVEL
