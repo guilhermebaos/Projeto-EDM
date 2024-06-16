@@ -1,11 +1,8 @@
 from games import colour_cycle, memory
-from machine import Pin, PWM
+from machine import Pin
 import asyncio
 import web
 import gc
-
-
-
 
 
 # Botões Input
@@ -85,7 +82,8 @@ async def receive_message(msg):
 
     elif "MEMORY" in msg:
         dif = int(msg[-1])
-
+        task = asyncio.create_task(memory(num_levels=1e6, difficulty=dif))
+        running_tasks["memory"] = task
 
     return
 
@@ -111,6 +109,13 @@ async def checkbut():
 # Página Index
 @app.route('/')
 async def index_handler(r, w):
+    with open("index.html") as file:
+        w.write(file.read())
+    await w.drain()
+
+
+@app.route('/index.html')
+async def index_handler2(r, w):
     with open("index.html") as file:
         w.write(file.read())
     await w.drain()
@@ -151,7 +156,6 @@ async def websocketjs_handler(r, w):
     with open("websocket.js") as file:
         w.write(file.read())
     await w.drain()
-
 
 
 @app.route('/ws')

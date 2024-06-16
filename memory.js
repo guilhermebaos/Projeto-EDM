@@ -11,13 +11,15 @@ window.addEventListener("load", () => {
 
     // Enable button action
     for (let i = 0; i < btns.length; i++) {
-        btns[i].addEventListener("click", selectDifficulty, i)
+        btns[i].addEventListener("click", (event) => {
+            selectDifficulty(i + 1)
+        })
     }
 }, false)
 
 
 // Desligar tarefas do ESP antes de sair da página
-window.addEventListener("visibilitychange", () => {
+window.addEventListener("visibilitychange", (event) => {
     websocket.send("STOP")
 }, false)
 
@@ -49,6 +51,9 @@ function selectDifficulty(dif) {
 
 
 function restartGame() {
+    // Desativar o ESP
+    sendMessage("STOP")
+
     // Enable buttons
     for (let i = 0; i < btns.length; i++) {
         btns[i].removeAttribute("disabled")

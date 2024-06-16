@@ -182,6 +182,7 @@ async def memory(
         random_sequence = []
         for _ in range(n):
             random_sequence.append(choice(colours))
+
         # mostrar a sequência de cores gerada piscando os LEDs por ordem
         for colour in random_sequence:
             if colour == "red":

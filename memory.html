@@ -53,66 +53,97 @@
     <main class="container text-center mt-4 col-md-8 col-md-offset-2 col-xl-6 col-xl-offset-6">
         <h1 class="my-brand">Jogo da Memória</h1>
         
-        <p>Repete a sequência de luzes mostrada no LED do ESP32</p>
+        <p>Repete a sequência de luzes mostrada no LED RGB</p>
 
+        <h2 class="mt-5">Regras</h2>
+        <p>O jogo funciona da seguinte forma:</p>
+        <ol class="text-start">
+            <li class="my-1">O LED RGB vai mostrar uma sequência de cores.</li>
+            <li class="my-1">O LED RGB vai piscar verde duas vezes.</li>
+            <li class="my-1">Agora podes inserir a sequência de cores igual à do ESP (se te lembrares!).</li>
+            <li class="my-1">Após submeteres a tua sequência de cores, o LED RGB vai piscar vermelho se a tua sequência estiver errada e verde se estiver certa.</li>
+            <li class="my-1">Se acertaste na sequência de cores avanças para o nível seguinte, se não, tens de repetir o nível atual.</li>
+            <li class="my-1">Desafia-te a chegar ao nível mais alto possível!</li>
+        </ol>
         <h2 class="mt-5">Controlos</h2>
         <p>Usa o Joystick para indicares a sequência de cores:</p>
         <div id="teste-joystick" class="container my-3">
             <div class="row">
-                <div class="col-4">
+                <div class="col-md-3 col-0"></div>
+                <div class="col-md-2 col-4">
                     <div id="NO" class="rounded-div border border-dark"> GREEN </div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-2 col-4">
                     <div id="UP" class="rounded-div"></div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-2 col-4">
                     <div id="NE" class="rounded-div border border-dark">BLUE</div>
                 </div>
+                <div class="col-md-3 col-0"></div>
             </div>
             <div class="row mt-3">
-                <div class="col-4">
+                <div class="col-md-3 col-0"></div>
+                <div class="col-md-2 col-4">
                     <div id="LEFT" class="rounded-div"></div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-2 col-4">
                     <div id="CENTER" class="rounded-div border border-dark">SUBMIT</div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-2 col-4">
                     <div id="RIGHT" class="rounded-div"></div>
                 </div>
+                <div class="col-md-3 col-0"></div>
             </div>
             <div class="row mt-3">
-                <div class="col-4">
+                <div class="col-md-3 col-0"></div>
+                <div class="col-md-2 col-4">
                     <div id="SO" class="rounded-div border border-dark">RED</div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-2 col-4">
                     <div id="DOWN" class="rounded-div"></div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-2 col-4">
                     <div id="SE" class="rounded-div border border-dark">CANCEL</div>
                 </div>
+                <div class="col-md-3 col-0"></div>
             </div>
         </div>
-        <h2 class="mt-5">Dificuldade</h2>
+        <h2 class="mt-5">Começar o Jogo</h2>
         <p>
             Escolhe a dificuldade em que queres jogar:
         </p>
-        <div id="teste-joystick" class="container my-3">
+        <div class="container my-3">
             <div class="row">
-                <div class="col-4">
+                <div class="col-md-3 col-0"></div>
+                <div class="col-md-2 col-4">
                     <div class="rounded-div"><button id="d1" class="btn btn-light"> Normal </button></div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-2 col-4">
                     <div class="rounded-div"> <button id="d2" class="btn btn-light"> Difícil </button></div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-2 col-4">
                     <div class="rounded-div"><button id="d3" class="btn btn-light"> Expert </button></div>
                 </div>
+                <div class="col-md-3 col-0"></div>
             </div>
         </div>
 
         <h2 class="mt-5">Nível Atual</h2>
         <p>Estás no nível <span id="level">1</span>!</p>
 
+        <div class="container my-3">
+            <div class="row">
+                <div class="col-md-3 col-0"></div>
+                <div class="col-md-2 col-4">
+                </div>
+                <div class="col-md-2 col-4">
+                    <div class="rounded-div"> <button id="d2" class="btn btn-light" onclick="restartGame()"> Terminar </button></div>
+                </div>
+                <div class="col-md-2 col-4">
+                </div>
+                <div class="col-md-3 col-0"></div>
+            </div>
+        </div>
 
         
         <h2 class="mt-5">Sequência Introduzida</h2>
