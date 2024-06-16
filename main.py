@@ -212,17 +212,21 @@ async def memory(
             if not butred.value():  # pressiona vermelho
                 now_press = "red"
 
-            if not butgreen.value():  # pressiona verde
+            elif not butgreen.value():  # pressiona verde
                 now_press = "green"
 
-            if not butblue.value():  # pressiona azul
+            elif not butblue.value():  # pressiona azul
                 now_press = "blue"
 
-            if not butreset.value():  # dar reset à resposta
+            elif not butreset.value():  # dar reset à resposta
                 now_press = "reset"
 
-            if not butsubmit.value():  # submeter a resposta
+            elif not butsubmit.value():  # submeter a resposta
                 break
+
+            else:
+                now_press = ""
+                last_press = ""
 
             if now_press != last_press:
                 if now_press == "reset":
@@ -230,6 +234,8 @@ async def memory(
                 else:
                     moves += [now_press]
 
+                # enviar lista de moves
+                asyncio.create_task(send_message(str(moves)))
                 last_press = now_press
 
 
