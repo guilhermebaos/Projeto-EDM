@@ -1,6 +1,8 @@
 let d1, d2, d3
 let btns
 
+let level
+
 // Carregar a página
 window.addEventListener("load", () => {
     d1 = document.getElementById("d1")
@@ -15,6 +17,9 @@ window.addEventListener("load", () => {
             selectDifficulty(i + 1)
         })
     }
+
+    // Span onde mostramos o nível
+    level = document.getElementById("level")
 }, false)
 
 
@@ -30,7 +35,9 @@ function sendMessage(msg) {
 
 
 function receiveMessage(msg) {
-    
+    if (msg.startsWith("LEVEL")) {
+        level.innerText = msg.slice(msg.length-1)
+    }
 }
 
 
