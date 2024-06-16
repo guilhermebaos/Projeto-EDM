@@ -2,7 +2,7 @@ import Paddle from '/src/paddle.js'
 import Ball from '/src/ball.js'
 import InputHandler from '/src/input.js'
 
-import {buildLevel, level1, level2} from '/src/levels.js'
+import {buildLevel, level1, level2, level3} from '/src/levels.js'
 
 const GAMESTATE = {
     PAUSED: 0,
@@ -36,7 +36,7 @@ export default class Game {
         this.lives = 3
 
         // Níveis
-        this.levels = [level1, level2]
+        this.levels = [level1, level2, level3]
         this.currentLevel = 0
     }
 
@@ -102,7 +102,7 @@ export default class Game {
             ctx.textAlign = 'center'
             ctx.fillStyle = 'white'
 
-            ctx.fillText('Clica no ESPAÇO para começar', this.gameWidth / 2, this.gameHeight / 2)
+            ctx.fillText('Clica no START para começar', this.gameWidth / 2, this.gameHeight / 2)
         }
 
         if (this.gamestate === GAMESTATE.GAMEOVER) {
