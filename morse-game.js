@@ -64,11 +64,14 @@ function gameStateWORD() {
 
 function gameStateAGAIN() {
     // Enviar a palavra para o ESP (outra vez)
-    sendWord(word)
+    if (word) sendWord(word)
 }
 
 
 function gameStateCHECK() {
+    // Se ainda não houver palavra, evitar erros
+    if (!word) return
+
     // Verificar se a palavra obtida é igual à gerada
     let guess = palavraInput.value.toLowerCase()
     if (guess == word) {
