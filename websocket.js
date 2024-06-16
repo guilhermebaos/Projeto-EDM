@@ -8,6 +8,8 @@ function init() {
         scheme = 'ws:'
 
     display = document.getElementById("display")
+    display.innerText = "À espera..."
+    display.style.color = "unset"
     
     let wsUri = scheme + '//' + window.location.hostname + '/ws';
     console.log("Connecting to " + wsUri + "...")
@@ -30,6 +32,8 @@ function onClose(evt) {
     console.log("Disconnected")
     display.innerText = "Desconectado :("
     display.style.color = "red"
+    // Voltar a tentar conectar
+    // window.setTimeout(init, 100)
 }
 
 function onMessage(evt) {
