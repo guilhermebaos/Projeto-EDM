@@ -16,6 +16,7 @@
     <!-- Our JS -->
      <script src="websocket.js"></script>
      <script src="morse.js" defer></script>
+     <script src="morse-game.js" defer></script>
 
     <title>
         Jogos com Joystick
@@ -55,7 +56,7 @@
         <ol class="text-start">
             <li class="my-1">Escolhe a dificuldade. Quanto maior for a dificuldade escolhida, maior o tamanho das palavras em jogo.</li>
             <li class="my-1">O LED RGB vai mostrar uma sequência de traços e pontos emitindo luz por mais ou menos tempo.</li>
-            <li class="my-1">Inserir a palavra correspondente ao código Morse enviado. As palavras estão em <span class="fw-bold">inglês</span>!</li>
+            <li class="my-1">Inserir a palavra correspondente ao código Morse enviado (<a href="https://morsedecoder.com/pt/">ajuda</a>). As palavras estão em <span class="fw-bold">inglês</span>!</li>
             <li class="my-1">O site vai indicar se a palavra está correta ou não e indicar quantos pontos tens!</li>
             <li class="my-1">Desafia-te a ganhar o maior número de pontos possível!</li>
         </ol>
@@ -87,21 +88,25 @@
         <h2 class="mt-5">Descodificar o Morse</h2>
         <p>Insere a palavra que viste no LED!</p>
         <input id="palavra" type="text">
+        <p><span id="resultado">Esperando...</span></p>
         <div class="row mt-4">
-            <div class="col-md-3 col-0"></div>
-            <div class="col-md-2 col-4">
+            <div class="col-md-4 col-1"></div>
+            <div class="col-md-2 col-5">
+                <div class="rounded-div"> <button class="btn btn-light" onclick="gameStateAGAIN()"> Repetir </button></div>
             </div>
-            <div class="col-md-2 col-4">
-                <div class="rounded-div"> <button class="btn btn-light" onclick="enviarPalavra()"> Submeter </button></div>
+            <div class="col-md-2 col-5">
+                <div class="rounded-div"> <button class="btn btn-light" onclick="gameStateCHECK()"> Submeter </button></div>
             </div>
-            <div class="col-md-2 col-4">
-            </div>
-            <div class="col-md-3 col-0"></div>
+            <div class="col-md-4 col-1"></div>
         </div>
 
         <h2 class="mt-5">Pontos</h2>
-        <p>Já ganhaste <span id="level" class="fw-bold">1</span> pontos!</p>
+        <p>Já ganhaste <span id="level" class="fw-bold">0</span> pontos!</p>
 
+        <!--
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi quam ipsum quia et deserunt eius aliquid! Distinctio, sapiente aliquid. Soluta, repudiandae? Accusantium, ab aut nostrum soluta autem id sint minima.
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi quam ipsum quia et deserunt eius aliquid! Distinctio, sapiente aliquid. Soluta, repudiandae? Accusantium, ab aut nostrum soluta autem id sint minima.
+        -->
         <div class="container my-3">
             <div class="row">
                 <div class="col-md-3 col-0"></div>
@@ -116,10 +121,6 @@
             </div>
         </div>
     </main>
-    <!--
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi quam ipsum quia et deserunt eius aliquid! Distinctio, sapiente aliquid. Soluta, repudiandae? Accusantium, ab aut nostrum soluta autem id sint minima.
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi quam ipsum quia et deserunt eius aliquid! Distinctio, sapiente aliquid. Soluta, repudiandae? Accusantium, ab aut nostrum soluta autem id sint minima.
-    -->
     <footer class="container-fluid fs-5 text-light mt-5">
       <div class="row p-1 p-3">
         <div class="col-md-6 text-md-start col-12 text-center">

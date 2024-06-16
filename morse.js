@@ -18,12 +18,6 @@ window.addEventListener("load", () => {
             selectDifficulty(i + 1)
         })
     }
-
-    // Span onde mostramos os pontos
-    level = document.getElementById("level")
-
-    // Input da palavra
-    palavra = document.getElementById("palavra")
 }, false)
 
 
@@ -33,13 +27,13 @@ window.addEventListener("visibilitychange", (event) => {
 }, false)
 
 
-function enviarPalavra() {
-    console.log(palavra.value)
+function sendMessage(msg) {
+    websocket.send(msg)
 }
 
 
-function sendMessage(msg) {
-    websocket.send(msg)
+function sendWord(msg) {
+    websocket.send(`MORSE:${msg}`)
 }
 
 
@@ -50,12 +44,7 @@ function receiveMessage(msg) {
 
 function selectDifficulty(dif) {
     // Start game
-    try {
-        console.log(`MORSE${dif}`)
-        sendMessage(`MORSE${dif}`)
-    } catch (e) {
-        console.log(e)
-    }
+    startGame(dif)
 
     // Disable buttons
     for (let i = 0; i < btns.length; i++) {

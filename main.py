@@ -40,6 +40,31 @@ def turnOFF():
 # Mostrar que chegamos ao main.py
 turnON(1)
 
+
+# Gerir tarefas para o LED
+running_tasks = dict()
+async def stop_tasks():
+    global running_tasks
+    for task in running_tasks.values():
+        task.cancel()
+
+    running_tasks = dict()
+
+
+async def cancel_task(task_str):
+    global running_tasks
+    task = running_tasks.get(task_str, False)
+    if task:
+        task.cancel()
+        running_tasks.pop(task_str)
+
+
+async def stop_leds():
+    await stop_tasks()
+    await asyncio.sleep(0)
+    turnOFF()
+
+
 # Criar a App
 app = web.App(host='0.0.0.0', port=80)
 
@@ -55,22 +80,6 @@ async def send_message(msg):
             print("Error sending message: " + str(e))
 
 
-running_tasks = dict()
-async def stop_tasks():
-    global running_tasks
-    for task in running_tasks.values():
-        task.cancel()
-
-    running_tasks = dict()
-
-
-async def cancel_task(task_str):
-    global running_tasks
-    task = running_tasks.get(task_str, False)
-    if task:
-        task.cancel()
-
-
 async def receive_message(msg):
 
     # Ordem para ligar um dos LEDs
@@ -83,21 +92,26 @@ async def receive_message(msg):
         turnOFF()
 
     elif msg == "STOP":
-        asyncio.create_task(send_message(msg))
-        await stop_tasks()
-        await asyncio.sleep(0.1)
-        turnOFF()
+        await stop_leds()
 
     elif msg == "CYCLE_START":
-        await cancel_task("colour_cycle")
+        await stop_leds()
         task = asyncio.create_task(colour_cycle(cycles=1e6))
         running_tasks["colour_cycle"] = task
 
     elif "MEMORY" in msg:
-        await cancel_task("memory")
+        await stop_leds()
         dif = int(msg[-1])
         task = asyncio.create_task(memory(num_levels=1e6, difficulty=dif))
         running_tasks["memory"] = task
+
+    elif "MORSE" in msg:
+        await stop_leds()
+        word = msg.split(":")[1]
+
+        await asyncio.sleep(0.3)
+        task = asyncio.create_task(morse(word))
+        running_tasks["morse"] = task
 
     return
 
@@ -238,7 +252,6 @@ async def memory(
                 asyncio.create_task(send_message(str(moves)))
                 last_press = now_press
 
-
             await asyncio.sleep_ms(4)
 
         await asyncio.sleep(1)
@@ -279,24 +292,26 @@ async def morse(word):
     global morse_codes
 
     # analisar cada caracter na palavra
-    for letter in word:
+    for letter in word.upper():
 
         # associar o código do caracter
         code = morse_codes[letter]
+        asyncio.create_task(send_message(code))
 
         # mostrar no LED cada símbolo do código
         for sym in code:
 
             # ligar o LED
-            blue.value(0)
+            turnON(2)
 
             # desligar passado um tempo que depende se era ponto ou traço
             if sym == ".":
                 await asyncio.sleep(0.2)
-                blue.value(1)
+                turnOFF()
             elif sym == "-":
                 await asyncio.sleep(0.6)
-                blue.value(1)
+                turnOFF()
+
             await asyncio.sleep(0.4)
 
         await asyncio.sleep(1)
@@ -350,6 +365,13 @@ async def morse_handler(r, w):
 @app.route('/morse.js')
 async def morsejs_handler(r, w):
     with open("morse.js") as file:
+        w.write(file.read())
+    await w.drain()
+
+
+@app.route('/morse-game.js')
+async def morsegamejs_handler(r, w):
+    with open("morse-game.js") as file:
         w.write(file.read())
     await w.drain()
 
