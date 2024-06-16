@@ -25,6 +25,9 @@ function receiveMessage(msg) {
         case '1':
             window.game.paddle.moveRight()
             break
+        
+        case '2':
+            window.location.reload()
 
         case '3':
             window.game.start()

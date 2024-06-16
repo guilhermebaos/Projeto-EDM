@@ -45,8 +45,63 @@
     </nav>
 
     <main class="container text-center mt-4 col-md-8 col-md-offset-2 col-xl-6 col-xl-offset-6">
-        <h1 class="my-brand mb-5">Breakout</h1>
+      <h1 class="my-brand">Breakout</h1>
+        <p>O clássico</p>
         
+        
+        <h2 class="mt-5">Regras</h2>
+        <p>O jogo funciona da seguinte forma:</p>
+        <ol class="text-start">
+            <li class="my-1">Inicia o jogo.</li>
+            <li class="my-1">Não deixes a bola tocar na parte de baixo do ecrã! Tens 3 vidas, depois é gameover.</li>
+            <li class="my-1">Destrói os tijolos todos para avançar de nível!</li>
+        </ol>
+
+        <h2 class="mt-5">Controlos</h2>
+        <p>Usa o Joystick para indicares a sequência de cores:</p>
+        <div class="container my-3">
+            <div class="row">
+                <div class="col-md-3 col-0"></div>
+                <div class="col-md-2 col-4">
+                    <div id="NO" class="rounded-div border border-dark"> LEFT </div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div id="UP" class="rounded-div"></div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div id="NE" class="rounded-div border border-dark">RIGHT</div>
+                </div>
+                <div class="col-md-3 col-0"></div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-3 col-0"></div>
+                <div class="col-md-2 col-4">
+                    <div id="LEFT" class="rounded-div"></div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div id="CENTER" class="rounded-div border border-dark">RESTART</div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div id="RIGHT" class="rounded-div"></div>
+                </div>
+                <div class="col-md-3 col-0"></div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-3 col-0"></div>
+                <div class="col-md-2 col-4">
+                    <div id="SO" class="rounded-div border border-dark">START</div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div id="DOWN" class="rounded-div"></div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div id="SE" class="rounded-div border border-dark">PAUSE</div>
+                </div>
+                <div class="col-md-3 col-0"></div>
+            </div>
+        </div>
+
+        <h2 class="mt-5">O Jogo</h2>
         <section>
             <img id="imgBall" class="breakout" src="assets/images/ball.png">
             <img id="imgBrick" class="breakout" src="assets/images/brick.png">
