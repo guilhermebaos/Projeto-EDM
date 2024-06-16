@@ -1,4 +1,5 @@
-from games import colour_cycle
+from color_cycle import colour_cycle
+from morse import morse_codes
 from random import choice
 from machine import Pin
 import asyncio
@@ -60,28 +61,40 @@ async def stop_tasks():
     for task in running_tasks.values():
         task.cancel()
 
+    running_tasks = dict()
+
+
+async def cancel_task(task_str):
+    global running_tasks
+    task = running_tasks.get(task_str, False)
+    if task:
+        task.cancel()
+
 
 async def receive_message(msg):
 
     # Ordem para ligar um dos LEDs
     if msg in ["0", "1", "2"]:
         await stop_tasks()
+        await asyncio.sleep(0.1)
         turnON(int(msg))
 
     elif msg == "OFF":
         turnOFF()
 
-    elif msg == "CYCLE_START":
-        task = asyncio.create_task(colour_cycle(cycles=1e6))
-        running_tasks["colour_cycle"] = task
-
     elif msg == "STOP":
         asyncio.create_task(send_message(msg))
         await stop_tasks()
-        await asyncio.sleep(0)
+        await asyncio.sleep(0.1)
         turnOFF()
 
+    elif msg == "CYCLE_START":
+        await cancel_task("colour_cycle")
+        task = asyncio.create_task(colour_cycle(cycles=1e6))
+        running_tasks["colour_cycle"] = task
+
     elif "MEMORY" in msg:
+        await cancel_task("memory")
         dif = int(msg[-1])
         task = asyncio.create_task(memory(num_levels=1e6, difficulty=dif))
         running_tasks["memory"] = task
@@ -193,26 +206,34 @@ async def memory(
 
         # guardar a resposta do jogador
         moves = []
+        now_press, last_press = "", ""
         while 1:
 
             if not butred.value():  # pressiona vermelho
-                moves.append("red")
-                await asyncio.sleep(0.3)
+                now_press = "red"
 
             if not butgreen.value():  # pressiona verde
-                moves.append("green")
-                await asyncio.sleep(0.3)
+                now_press = "green"
 
             if not butblue.value():  # pressiona azul
-                moves.append("blue")
-                await asyncio.sleep(0.3)
+                now_press = "blue"
 
             if not butreset.value():  # dar reset à resposta
-                moves = []
-                await asyncio.sleep(0.3)
+                now_press = "reset"
 
             if not butsubmit.value():  # submeter a resposta
                 break
+
+            if now_press != last_press:
+                if now_press == "reset":
+                    moves = []
+                else:
+                    moves += [now_press]
+
+                last_press = now_press
+
+
+            await asyncio.sleep_ms(4)
 
         await asyncio.sleep(1)
 
@@ -234,11 +255,45 @@ async def memory(
 
         await asyncio.sleep(2)
 
-
     # desligar os LEDs
     red.value(1)
     green.value(1)
     blue.value(1)
+
+
+print(morse_codes)
+async def morse(word):
+    """
+    Decifrar Código-Morse: Cria uma mensagem em código-morse (mostrada no LED RGB),
+                        que o jogador deve decifrar.
+    O LED RGB deve estar em lógica negativa.
+    --- Parâmetros ---
+    - word: str, palavra a mostrar no LED RGB
+    """
+    global morse_codes
+
+    # analisar cada caracter na palavra
+    for letter in word:
+
+        # associar o código do caracter
+        code = morse_codes[letter]
+
+        # mostrar no LED cada símbolo do código
+        for sym in code:
+
+            # ligar o LED
+            blue.value(0)
+
+            # desligar passado um tempo que depende se era ponto ou traço
+            if sym == ".":
+                await asyncio.sleep(0.2)
+                blue.value(1)
+            elif sym == "-":
+                await asyncio.sleep(0.6)
+                blue.value(1)
+            await asyncio.sleep(0.4)
+
+        await asyncio.sleep(1)
 
 
 # Página Index
