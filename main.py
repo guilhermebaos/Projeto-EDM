@@ -278,6 +278,21 @@ async def memoryjs_handler(r, w):
     await w.drain()
 
 
+# Página código morse
+@app.route('/morse.html')
+async def morse_handler(r, w):
+    with open("morse.html") as file:
+        w.write(file.read())
+    await w.drain()
+
+
+@app.route('/morse.js')
+async def morsejs_handler(r, w):
+    with open("morse.js") as file:
+        w.write(file.read())
+    await w.drain()
+
+
 # Ficheiros auxiliares
 @app.route('/style.css')
 async def style_handler(r, w):

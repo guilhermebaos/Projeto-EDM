@@ -10,11 +10,6 @@
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/flatly/bootstrap.min.css">
 
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
     <!-- Our CSS -->
     <link rel="stylesheet" href="style.css">
 
@@ -43,7 +38,7 @@
                 <a class="nav-link" href="morse.html">Código Morse</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="pong.html">Pong</a>
+                <a class="nav-link" href="breakout.html">Breakout</a>
             </li>
           </ul>
         </div>
@@ -58,6 +53,7 @@
         <h2 class="mt-5">Regras</h2>
         <p>O jogo funciona da seguinte forma:</p>
         <ol class="text-start">
+            <li class="my-1">Escolhe a dificuldade. Quanto maior for a dificuldade escolhida, menor o tempo entre cores diferentes.</li>
             <li class="my-1">O LED RGB vai mostrar uma sequência de cores.</li>
             <li class="my-1">O LED RGB vai piscar verde duas vezes.</li>
             <li class="my-1">Agora podes inserir a sequência de cores igual à do ESP (se te lembrares!).</li>
@@ -116,10 +112,10 @@
             <div class="row">
                 <!-- O ESP32 está a apagar uma parte dos dados! -->
                 <!-- Ideias: Asyncio está a interromper a meio da escrita (ficheiro demasiado grande); Memória corrompida por algum curto-circuito -->
-                <div style="display: none;">
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi quam ipsum quia et deserunt eius aliquid! Distinctio, sapiente aliquid. Soluta, repudiandae? Accusantium, ab aut nostrum soluta autem id sint minima.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum, nostrum? Sed architecto nihil dicta. Totam obcaecati vitae, cumque sed ab itaque, eveniet ad iusto rem quo unde voluptatem, eligendi sint.</p>
-                </div>
+                <!--
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi quam ipsum quia et deserunt eius aliquid! Distinctio, sapiente aliquid. Soluta, repudiandae? Accusantium, ab aut nostrum soluta autem id sint minima.
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi quam ipsum quia et deserunt eius aliquid! Distinctio, sapiente aliquid. Soluta, repudiandae? Accusantium, ab aut nostrum soluta autem id sint minima.
+                -->
                 <div class="col-md-3 col-0"></div>
                 <div class="col-md-2 col-4">
                     <div class="rounded-div"><button id="d1" class="btn btn-light"> Normal </button></div>
@@ -143,7 +139,7 @@
                 <div class="col-md-2 col-4">
                 </div>
                 <div class="col-md-2 col-4">
-                    <div class="rounded-div"> <button id="d2" class="btn btn-light" onclick="restartGame()"> Terminar </button></div>
+                    <div class="rounded-div"> <button class="btn btn-light" onclick="restartGame()"> Terminar </button></div>
                 </div>
                 <div class="col-md-2 col-4">
                 </div>
@@ -151,7 +147,7 @@
             </div>
         </div>
 
-<!--x
+<!--
         <h2 class="mt-5">Sequência Introduzida</h2>
         <p>Aqui podes ver a sequência que introduziste:</p>
         <div class="container">
@@ -167,7 +163,7 @@
                 </div>
             </div>
         </div>
-    -->
+-->
     </main>
 
     <footer class="container-fluid fs-5 text-light mt-5">
