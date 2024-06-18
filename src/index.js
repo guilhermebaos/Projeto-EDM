@@ -19,7 +19,7 @@ window.game = game
 function receiveMessage(msg) {
     switch(msg) {
         case '0':
-            window.game.paddle.moveLeft()
+            window.game.start()
             break
 
         case '1':
@@ -30,7 +30,7 @@ function receiveMessage(msg) {
             window.location.reload()
 
         case '3':
-            window.game.start()
+            window.game.paddle.moveLeft()
             break
 
         case '4':

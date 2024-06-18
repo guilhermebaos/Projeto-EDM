@@ -1,2 +1,2 @@
-ssid = 'Rede CM1'
-password = '361BC1726A00DECFB275D38564C7E404B02794BCAA52315324BAAFD80CEDC6EF'
+ssid = 'Gonçalo Coelho'
+password = 'goncalo11'
